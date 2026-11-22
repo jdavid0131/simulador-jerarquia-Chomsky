@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# ===== CAPA 1: DATOS =====
+#capa datos
 
 AUTOMATAS = {
     "Cadenas binarias que terminan en 01": {
@@ -54,7 +54,7 @@ AUTOMATAS = {
 }
 
 
-# ===== CAPA 2: LÓGICA =====
+#capa logica
 def acepta(afd, cadena):
     estado = afd["inicial"]
     for simbolo in cadena:
@@ -64,7 +64,7 @@ def acepta(afd, cadena):
     return estado in afd["finales"]
 
 
-# ===== CAPA 3: INTERFAZ =====
+#capa interfaz
 ESTADOS_POR_FILA = 6
 COLOR_ACTUAL = "#ffe082"
 COLOR_ACEPTA = "#a5d6a7"
@@ -145,7 +145,7 @@ class VentanaAFD(tk.Toplevel):
         self.tabla.tag_configure("rechaza", background=COLOR_RECHAZA)
         self.tabla.pack(fill="x")
 
-    # ---------------------------------------------------------- Cargar lenguaje
+    # Cargar lenguaje
     def _cargar_automata(self):
         self.afd = AUTOMATAS[self.combo_afd.get()]
         self.lbl_desc.config(text=self.afd["descripcion"])
@@ -161,7 +161,7 @@ class VentanaAFD(tk.Toplevel):
         self._reiniciar()
 
     def _crear_etiquetas_estados(self):
-        for w in self.marco_estados.winfo_children():  # borra las casillas anteriores
+        for w in self.marco_estados.winfo_children(): 
             w.destroy()
         self.etiquetas_estados = {}
         for i, nombre in enumerate(self.afd["estados"]):
@@ -178,7 +178,7 @@ class VentanaAFD(tk.Toplevel):
                 relief="solid",
                 bg="white",
                 font=("Segoe UI", 11, "bold"),
-                bd=4 if nombre in self.afd["finales"] else 1,  # borde grueso = final
+                bd=4 if nombre in self.afd["finales"] else 1, 
             )
             etiqueta.grid(
                 row=i // ESTADOS_POR_FILA, column=i % ESTADOS_POR_FILA, padx=3, pady=3
@@ -187,7 +187,6 @@ class VentanaAFD(tk.Toplevel):
 
     def _crear_tabla(self):
         simbolos = self.afd["alfabeto"]
-        # Columnas: "estado" + una por símbolo (se llaman c0, c1... y su título es el símbolo).
         columnas = ["estado"] + [f"c{i}" for i in range(len(simbolos))]
         self.tabla.delete(*self.tabla.get_children())  # borra las filas anteriores
         self.tabla["columns"] = columnas
@@ -242,7 +241,7 @@ class VentanaAFD(tk.Toplevel):
         if self.pos < len(self.cadena):
             simbolo = self.cadena[self.pos]
             anterior = self.actual
-            self.actual = self.afd["transiciones"][(anterior, simbolo)]  # nuevo estado
+            self.actual = self.afd["transiciones"][(anterior, simbolo)] 
             self.pos += 1
             self.lbl_paso.config(
                 text=f"Leí '{simbolo}':   {anterior}  →  {self.actual}"
@@ -292,7 +291,5 @@ class VentanaAFD(tk.Toplevel):
                 fg="#c62828",
             )
 
-
-# main.py busca esta función y la llama al pulsar el botón del Nivel 3.
 def abrir(root):
     VentanaAFD(root)
